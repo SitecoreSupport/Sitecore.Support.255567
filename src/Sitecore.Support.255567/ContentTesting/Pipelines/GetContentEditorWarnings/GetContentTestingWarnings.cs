@@ -1,5 +1,6 @@
 ﻿namespace Sitecore.Support.ContentTesting.Pipelines.GetContentEditorWarnings
 {
+  using System;
   using System.Linq;
   using Sitecore.ContentTesting;
   using Sitecore.ContentTesting.Configuration;
@@ -9,6 +10,7 @@
   using Sitecore.ContentTesting.Pipelines.GetTestCandidates;
   using Sitecore.ContentTesting.Services;
   using Sitecore.Data;
+  using Sitecore.Diagnostics;
   using Sitecore.Globalization;
   using Sitecore.Pipelines.GetContentEditorWarnings;
 
@@ -73,19 +75,26 @@
         return;
       }
 
-      if (this.AddSuspendedTestWarning(args))
+      try
       {
-        return;
-      }
+        if (this.AddSuspendedTestWarning(args))
+        {
+          return;
+        }
 
-      if (this.AddActiveTestWarning(args))
-      {
-        return;
-      }
+        if (this.AddActiveTestWarning(args))
+        {
+          return;
+        }
 
-      if (this.AddPartOfActiveTestWarning(args))
+        if (this.AddPartOfActiveTestWarning(args))
+        {
+          return;
+        }
+      }
+      catch (Exception e)
       {
-        return;
+        Log.Error("Sitecore.Support.255567: Intercepted a failed attempt to build Content Editor warnings for " + args.Item.Uri, e, this);
       }
 
       this.AddContentEditorTestCandidateNotification(args);
