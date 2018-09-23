@@ -68,6 +68,11 @@
         return;
       }
 
+      if (this.testCandidateInitiator.GetTestInitiator(args.Item) != TestCandidatesInitiatorsEnum.Notification)
+      {
+        return;
+      }
+
       if (this.AddSuspendedTestWarning(args))
       {
         return;
@@ -83,10 +88,7 @@
         return;
       }
 
-      if (this.testCandidateInitiator.GetTestInitiator(args.Item) == TestCandidatesInitiatorsEnum.Notification)
-      {
-        this.AddContentEditorTestCandidateNotification(args);
-      }
+      this.AddContentEditorTestCandidateNotification(args);
     }
 
     public bool AddActiveTestWarning(GetContentEditorWarningsArgs args)
